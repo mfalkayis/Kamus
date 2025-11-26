@@ -86,11 +86,47 @@ public class RedBlackTree {
     
     // Method placeholder untuk rotasi (akan diisi pada langkah selanjutnya)
     private void leftRotate(Node x) {
-        // Implementasi Left Rotation
+        Node y = x.right; // y adalah right child dari x
+        x.right = y.left; // Subtree kiri y menjadi subtree kanan x
+
+        if (y.left != NIL) {
+            y.left.parent = x;
+        }
+
+        y.parent = x.parent; // Parent x menjadi parent y
+
+        if (x.parent == NIL) {
+            this.root = y;
+        } else if (x == x.parent.left) {
+            x.parent.left = y;
+        } else {
+            x.parent.right = y;
+        }
+
+        y.left = x; // x menjadi left child dari y
+        x.parent = y;
     }
     
     private void rightRotate(Node x) {
-        // Implementasi Right Rotation
+        Node y = x.left; // y adalah left child dari x
+        x.left = y.right; // Subtree kanan y menjadi subtree kiri x
+
+        if (y.right != NIL) {
+            y.right.parent = x;
+        }
+
+        y.parent = x.parent; // Parent x menjadi parent y
+
+        if (x.parent == NIL) {
+            this.root = y;
+        } else if (x == x.parent.right) {
+            x.parent.right = y;
+        } else {
+            x.parent.left = y;
+        }
+
+        y.right = x; // x menjadi right child dari y
+        x.parent = y;
     }
     
     public WordEntry search(String key) {
