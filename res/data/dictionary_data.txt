@@ -1,0 +1,5 @@
+Selamat Tinggal,Goodbye,Frasa,Digunakan saat berpisah untuk jangka waktu lama
+Cepat,Fast,Kata Sifat,Bergerak dengan kecepatan tinggi
+Pohon,Tree,Kata Benda,Tumbuhan berkayu besar
+Struktur Data,Data Structure,Frasa,Cara mengatur data secara efisien
+Kamus,Dictionary,Kata Benda,Buku yang berisi daftar kata-kata dan artinya
