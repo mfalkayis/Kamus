@@ -12,6 +12,41 @@ public class DictionaryManager {
     private final String DATA_FILE_PATH = "res/data/dictionary_data.txt";
     private static final String CSV_DELIMITER = ",";
 
+    private RedBlackTree indoToEnglishTree; 
+    private HashTable englishToIndoTable;
+
+    public DictionaryManager() {
+        this.indoToEnglishTree = new RedBlackTree();
+        this.englishToIndoTable = new HashTable();
+    }
+
+    public void initializeDictionary() {
+        // Gunakan method loadDictionaryData yang sudah ada
+        List<WordEntry> entries = loadDictionaryData(); 
+
+        for (WordEntry entry : entries) {
+            // 1. Insert ke Red-Black Tree (Kunci: Kata Indonesia)
+            this.indoToEnglishTree.insert(entry); 
+            
+            // 2. Insert ke Hash Table (Kunci: Kata Inggris)
+            this.englishToIndoTable.insert(entry);
+        }
+        
+        System.out.println("Kamus berhasil diinisialisasi.");
+        System.out.println("RBT size: " + (indoToEnglishTree.getRoot() != RedBlackTree.NIL ? entries.size() : 0));
+        System.out.println("Hash Table size: " + englishToIndoTable.size());
+    }
+
+    // --- Metode Pencarian Publik ---
+
+    public WordEntry searchIndoToEnglish(String indoKey) {
+        return indoToEnglishTree.search(indoKey);
+    }
+
+    public WordEntry searchEnglishToIndo(String englishKey) {
+        return englishToIndoTable.search(englishKey);
+    }
+    
     public List<WordEntry> loadDictionaryData() {
         List<WordEntry> entries = new ArrayList<>();
         
