@@ -81,7 +81,60 @@ public class RedBlackTree {
     
     // Method kosong, akan diisi pada langkah selanjutnya
     private void insertFixUp(Node k) {
-        // Akan diimplementasikan Logika Rotasi dan Rekolorasi RBT
+        // Loop selama parent adalah RED (melanggar aturan RBT)
+        while (k.parent.color == com.kamus.core.models.Color.RED) {
+            Node uncle; // Paman (saudara dari parent)
+            
+            // Kasus A: Parent adalah left child dari Grandparent
+            if (k.parent == k.parent.parent.left) {
+                uncle = k.parent.parent.right;
+
+                // Case 1: Paman berwarna MERAH (Recolor)
+                if (uncle.color == com.kamus.core.models.Color.RED) {
+                    k.parent.color = com.kamus.core.models.Color.BLACK;
+                    uncle.color = com.kamus.core.models.Color.BLACK;
+                    k.parent.parent.color = com.kamus.core.models.Color.RED;
+                    k = k.parent.parent; // Lanjutkan dari Grandparent
+                } 
+                // Kasus 2 & 3: Paman berwarna HITAM (Rotasi)
+                else {
+                    // Case 2: Node k adalah right child (Rotasi ke Kiri)
+                    if (k == k.parent.right) {
+                        k = k.parent;
+                        leftRotate(k);
+                    }
+                    // Case 3: Node k adalah left child (Rotasi ke Kanan + Recolor)
+                    k.parent.color = com.kamus.core.models.Color.BLACK;
+                    k.parent.parent.color = com.kamus.core.models.Color.RED;
+                    rightRotate(k.parent.parent);
+                }
+            } 
+            // Kasus B: Parent adalah right child dari Grandparent (Simetris)
+            else {
+                uncle = k.parent.parent.left;
+
+                // Case 1: Paman berwarna MERAH (Recolor)
+                if (uncle.color == com.kamus.core.models.Color.RED) {
+                    k.parent.color = com.kamus.core.models.Color.BLACK;
+                    uncle.color = com.kamus.core.models.Color.BLACK;
+                    k.parent.parent.color = com.kamus.core.models.Color.RED;
+                    k = k.parent.parent;
+                } 
+                // Kasus 2 & 3: Paman berwarna HITAM (Rotasi)
+                else {
+                    // Case 2: Node k adalah left child (Rotasi ke Kanan)
+                    if (k == k.parent.left) {
+                        k = k.parent;
+                        rightRotate(k);
+                    }
+                    // Case 3: Node k adalah right child (Rotasi ke Kiri + Recolor)
+                    k.parent.color = com.kamus.core.models.Color.BLACK;
+                    k.parent.parent.color = com.kamus.core.models.Color.RED;
+                    leftRotate(k.parent.parent);
+                }
+            }
+        }
+        this.root.color = com.kamus.core.models.Color.BLACK; // Root harus selalu BLACK
     }
     
     // Method placeholder untuk rotasi (akan diisi pada langkah selanjutnya)
