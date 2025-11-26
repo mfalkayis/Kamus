@@ -1,0 +1,19 @@
+# Compiled class files
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# IDE Files (contoh untuk IntelliJ, Eclipse)
+.idea/
+*.iml
+.classpath
+.project
+target/
+bin/
+
+# Log and Temp Files
+*.log
+temp/
