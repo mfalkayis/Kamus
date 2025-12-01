@@ -1,6 +1,5 @@
 package kamus;
 
-// UBAH NAMA DISINI DARI Color JADI RBTColor
 enum RBTColor {
     RED, BLACK
 }
@@ -12,14 +11,14 @@ public class Node {
     public Node parent;
     public Node left;
     public Node right;
-    public RBTColor color; // UBAH TIPE DATA DISINI
+    public RBTColor color; 
 
     public Node(WordEntry data) {
         this.data = data;
         if (data != null) {
             this.key = data.getIndoWord();
         }
-        this.color = RBTColor.RED; // UBAH DISINI
+        this.color = RBTColor.RED; 
         this.left = null;
         this.right = null;
         this.parent = null;
