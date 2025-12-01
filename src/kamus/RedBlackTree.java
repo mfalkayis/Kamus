@@ -15,7 +15,7 @@ public class RedBlackTree {
 
     public void insert(WordEntry entry) {
         // Log Visualisasi Insert (Kita print simpel saja biar terminal tidak penuh saat loading awal)
-        // System.out.println("➕ Menyisipkan ke RBT: " + entry.getIndoWord());
+        // System.out.println("[+] Menyisipkan ke RBT: " + entry.getIndoWord());
 
         Node node = new Node(entry);
         node.left = NIL;
@@ -92,7 +92,7 @@ public class RedBlackTree {
     }
 
     private void leftRotate(Node x) {
-        System.out.println("   🔄 [RBT BALANCING] Rotasi Kiri pada node: " + x.getKey());
+        System.out.println("   [ROTASI] Kiri pada node: " + x.getKey());
         Node y = x.right;
         x.right = y.left;
         if (y.left != NIL) y.left.parent = x;
@@ -105,7 +105,7 @@ public class RedBlackTree {
     }
 
     private void rightRotate(Node x) {
-        System.out.println("   🔄 [RBT BALANCING] Rotasi Kanan pada node: " + x.getKey());
+        System.out.println("   [ROTASI] Kanan pada node: " + x.getKey());
         Node y = x.left;
         x.left = y.right;
         if (y.right != NIL) y.right.parent = x;
@@ -120,39 +120,39 @@ public class RedBlackTree {
     // --- VISUALISASI PENCARIAN (SEARCH) ---
     public WordEntry search(String key) {
         System.out.println("\n------------------------------------------------");
-        System.out.println("🌳 [RBT SEARCH] Mencari Kata: \"" + key + "\"");
+        System.out.println("[RBT SEARCH] Mencari Kata: \"" + key + "\"");
         System.out.println("------------------------------------------------");
         
         Node current = root;
         int steps = 0;
-        String path = "";
 
         while (current != NIL) {
             steps++;
             int cmp = key.compareToIgnoreCase(current.getKey());
             
-            String nodeColor = (current.color == RBTColor.RED) ? "🔴(Red)" : "⚫(Black)";
+            // Mengganti Emot Warna dengan Teks
+            String nodeColor = (current.color == RBTColor.RED) ? "[MERAH]" : "[HITAM]";
             System.out.println("   Langkah " + steps + ": Cek Node [" + current.getKey() + "] " + nodeColor);
 
             if (cmp == 0) {
-                System.out.println("   ✅ KETEMU! Data ditemukan pada kedalaman: " + steps);
+                System.out.println("   [KETEMU] Data ditemukan pada kedalaman: " + steps);
                 System.out.println("------------------------------------------------\n");
                 return current.data;
             } else if (cmp < 0) {
-                System.out.println("      ↳ Kata lebih kecil (A-Z), belok ke KIRI ⬅️");
+                System.out.println("      >> Kata lebih kecil (A-Z), belok ke KIRI (L)");
                 current = current.left;
             } else {
-                System.out.println("      ↳ Kata lebih besar (A-Z), belok ke KANAN ➡️");
+                System.out.println("      >> Kata lebih besar (A-Z), belok ke KANAN (R)");
                 current = current.right;
             }
         }
-        System.out.println("   ❌ TIDAK KETEMU. Sampai di ujung daun (NIL).");
+        System.out.println("   [X] TIDAK KETEMU. Sampai di ujung daun (NIL).");
         System.out.println("------------------------------------------------\n");
         return null;
     }
 
     public void printTree() {
-        System.out.println("\n🌳 VISUALISASI STRUKTUR RED-BLACK TREE:");
+        System.out.println("\n[VISUALISASI STRUKTUR RED-BLACK TREE]");
         System.out.println("========================================");
         if (root == NIL) {
             System.out.println("(Pohon Kosong)");
@@ -167,24 +167,22 @@ public class RedBlackTree {
         if (node != NIL) {
             System.out.print(indent);
             
-            // Simbol cabang: └── untuk anak terakhir, ├── untuk cabang tengah
+            // Simbol cabang menggunakan karakter ASCII standar yang lebih aman
             if (isLast) {
-                System.out.print("└── ");
+                System.out.print("L-- "); // L-- menggantikan simbol siku
                 indent += "    ";
             } else {
-                System.out.print("├── ");
-                indent += "│   ";
+                System.out.print("|-- "); // |-- menggantikan simbol cabang
+                indent += "|   ";
             }
 
-            // Indikator Warna
-            String colorIcon = (node.color == RBTColor.RED) ? "🔴" : "⚫";
+            // Indikator Warna (Ganti Emotikon dengan Teks)
+            String colorIcon = (node.color == RBTColor.RED) ? "(R)" : "(B)";
             
             // Print Data: [Posisi] Kata (Warna)
+            // (R) = RED/MERAH, (B) = BLACK/HITAM
             System.out.println(position + " " + node.getKey() + " " + colorIcon);
 
-            // Rekursif ke anak Kiri dan Kanan
-            // Kita anggap anak Kanan sebagai 'last' agar struktur terlihat rapi ke bawah
-            // Posisi L = Left (Kiri), R = Right (Kanan)
             printTreeRecursive(node.left, indent, false, "[L]");
             printTreeRecursive(node.right, indent, true,  "[R]");
         }
