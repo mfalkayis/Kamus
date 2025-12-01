@@ -1,0 +1,38 @@
+Apel,Apple,Kata Benda,Buah yang umumnya berwarna merah atau hijau
+Air,Water,Kata Benda,Cairan jernih yang penting bagi kehidupan
+Algoritma,Algorithm,Istilah Komputer,Langkah-langkah logis penyelesaian masalah
+Buku,Book,Kata Benda,Kumpulan kertas tertulis yang dijilid
+Besar,Big,Kata Sifat,Ukuran di atas rata-rata
+Cepat,Fast,Kata Sifat,Bergerak dalam waktu singkat
+Cinta,Love,Kata Benda,Perasaan kasih sayang yang kuat
+Dunia,World,Kata Benda,Bumi dan segala isinya
+Data,Data,Istilah Komputer,Kumpulan fakta atau angka
+Emas,Gold,Kata Benda,Logam mulia berwarna kuning
+Fungsi,Function,Istilah Komputer,Blok kode yang melakukan tugas tertentu
+Gajah,Elephant,Kata Benda,Hewan darat terbesar dengan belalai
+Hutan,Forest,Kata Benda,Kawasan luas yang ditumbuhi pohon lebat
+Hitam,Black,Kata Sifat,Warna tergelap tanpa cahaya
+Ikan,Fish,Kata Benda,Hewan yang hidup di air dan bernapas dengan insang
+Jalan,Street,Kata Benda,Jalur untuk lalu lintas kendaraan atau orang
+Komputer,Computer,Kata Benda,Perangkat elektronik untuk memproses data
+Kucing,Cat,Kata Benda,Hewan peliharaan berbulu yang lucu
+Lari,Run,Kata Kerja,Bergerak cepat dengan kaki
+Makan,Eat,Kata Kerja,Memasukkan makanan ke dalam mulut
+Merah,Red,Kata Sifat,Warna seperti darah atau api
+Naruto,Naruto,Tokoh Fiksi,Ninja berambut kuning dari desa Konoha
+Node,Node,Istilah Komputer,Simpul atau titik dalam struktur data tree
+Pohon,Tree,Kata Benda,Tumbuhan berkayu besar
+Program,Program,Istilah Komputer,Serangkaian instruksi untuk komputer
+Rumah,House,Kata Benda,Bangunan tempat tinggal manusia
+Struktur Data,Data Structure,Istilah Komputer,Cara penyimpanan dan pengorganisasian data
+Tidur,Sleep,Kata Kerja,Mengistirahatkan tubuh dan pikiran
+Ular,Snake,Kata Benda,Reptil panjang tanpa kaki
+Video,Video,Kata Benda,Rekaman gambar bergerak
+Waktu,Time,Kata Benda,Seluruh rangkaian saat proses berlangsung
+Zebra,Zebra,Kata Benda,Kuda liar Afrika berbelang hitam putih
+Rickroll,Rickroll,Meme Internet,Jebakan berupa video musik Never Gonna Give You Up
+Jokowi,Joko Widodo,Tokoh Politik,Presiden Indonesia ke-7 yang populer dengan gaya blusukan.
+Spongebob,Spongebob,Tokoh Kartun,Spons kuning yang tinggal di dalam rumah nanas di Bikini Bottom.
+Windows XP,Windows XP,Sistem Operasi,OS legendaris Microsoft dengan suara startup yang bikin nostalgia.
+Gigachad,Gigachad,Meme Internet,Sosok pria hitam putih yang melambangkan maskulinitas absolut.
+Sad Violin,Sad Music,Musik Meme,Musik biola sedih yang cocok diputar saat momen tragis.
