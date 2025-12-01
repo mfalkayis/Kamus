@@ -150,4 +150,43 @@ public class RedBlackTree {
         System.out.println("------------------------------------------------\n");
         return null;
     }
+
+    public void printTree() {
+        System.out.println("\n🌳 VISUALISASI STRUKTUR RED-BLACK TREE:");
+        System.out.println("========================================");
+        if (root == NIL) {
+            System.out.println("(Pohon Kosong)");
+        } else {
+            printTreeRecursive(root, "", true, "(ROOT)");
+        }
+        System.out.println("========================================\n");
+    }
+
+    // Method rekursif untuk menggambar garis cabang
+    private void printTreeRecursive(Node node, String indent, boolean isLast, String position) {
+        if (node != NIL) {
+            System.out.print(indent);
+            
+            // Simbol cabang: └── untuk anak terakhir, ├── untuk cabang tengah
+            if (isLast) {
+                System.out.print("└── ");
+                indent += "    ";
+            } else {
+                System.out.print("├── ");
+                indent += "│   ";
+            }
+
+            // Indikator Warna
+            String colorIcon = (node.color == RBTColor.RED) ? "🔴" : "⚫";
+            
+            // Print Data: [Posisi] Kata (Warna)
+            System.out.println(position + " " + node.getKey() + " " + colorIcon);
+
+            // Rekursif ke anak Kiri dan Kanan
+            // Kita anggap anak Kanan sebagai 'last' agar struktur terlihat rapi ke bawah
+            // Posisi L = Left (Kiri), R = Right (Kanan)
+            printTreeRecursive(node.left, indent, false, "[L]");
+            printTreeRecursive(node.right, indent, true,  "[R]");
+        }
+    }
 }

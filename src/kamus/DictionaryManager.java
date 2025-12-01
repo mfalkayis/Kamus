@@ -30,9 +30,9 @@ public class DictionaryManager {
             this.englishToIndoTable.insert(entry);
         }
 
-        boolean isTreeFilled = indoToEnglishTree.getRoot() != RedBlackTree.NIL;
-        System.out.println("Data Loaded. RBT Ready: " + isTreeFilled);
-        System.out.println("Hash Table Entries: " + englishToIndoTable.size());
+        this.indoToEnglishTree.printTree(); 
+        
+        System.out.println("Data Loaded. Total Kata: " + entries.size());
     }
 
     public WordEntry searchIndoToEnglish(String indoKey) {
