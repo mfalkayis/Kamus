@@ -3,14 +3,14 @@ package kamus;
 import java.util.HashMap;
 
 public class HashTable {
-    private HashMap<String, WordEntry> reverseMap;
+    private HashMap<String, Node> reverseMap;
 
     public HashTable() {
         this.reverseMap = new HashMap<>();
     }
 
-    public void insert(WordEntry entry) {
-        this.reverseMap.put(entry.getEnglishWord().toLowerCase(), entry);
+    public void insert(Node node) {
+        this.reverseMap.put(node.data.getEnglishWord().toLowerCase(), node);
     }
 
     public int size() {
@@ -18,16 +18,16 @@ public class HashTable {
     }
 
     // --- VISUALISASI SEARCH HASHING ---
-    public WordEntry search(String englishKey) {
+    public Node search(String englishKey) {
         String keyLower = englishKey.toLowerCase();
         
         System.out.println("\n================================================");
-        System.out.println("#️⃣  [HASH TABLE SEARCH] Mencari Kata: \"" + englishKey + "\"");
+        System.out.println("# [HASH TABLE SEARCH] Mencari Kata: \"" + englishKey + "\"");
         System.out.println("================================================");
 
         // 1. Tunjukkan Rumus Hash
         int hashCode = keyLower.hashCode();
-        // Simulasi index bucket (biasanya hashcode % ukuran array, tapi di HashMap Java internal)
+        // Simulasi index bucket (hashcode % 16 hanyalah simulasi visual)
         int bucketIndex = Math.abs(hashCode) % 16; 
         
         System.out.println("   1. Menghitung Hash Code (Rumus Matematis):");
@@ -37,17 +37,20 @@ public class HashTable {
         
         // 2. Akses Langsung
         long start = System.nanoTime();
-        WordEntry result = this.reverseMap.get(keyLower);
+        
+        Node resultNode = this.reverseMap.get(keyLower);
+        
         long end = System.nanoTime();
 
-        if (result != null) {
-            System.out.println("   3. DITEMUKAN SECARA INSTAN! (O(1))");
+        if (resultNode != null) {
+            System.out.println("   3. [KETEMU] DITEMUKAN SECARA INSTAN! (O(1))");
+            System.out.println("      Data: " + resultNode.data.getIndoWord());
             System.out.println("      Waktu akses memori: " + (end - start) + " nanodetik");
         } else {
-            System.out.println("   3. Tidak ditemukan di bucket manapun.");
+            System.out.println("   3. [X] Tidak ditemukan di bucket manapun.");
         }
         System.out.println("================================================\n");
 
-        return result;
+        return resultNode;
     }
 }

@@ -14,9 +14,6 @@ public class RedBlackTree {
     public Node getRoot() { return root; }
 
     public void insert(WordEntry entry) {
-        // Log Visualisasi Insert (Kita print simpel saja biar terminal tidak penuh saat loading awal)
-        // System.out.println("[+] Menyisipkan ke RBT: " + entry.getIndoWord());
-
         Node node = new Node(entry);
         node.left = NIL;
         node.right = NIL;
@@ -117,8 +114,8 @@ public class RedBlackTree {
         x.parent = y;
     }
 
-    // --- VISUALISASI PENCARIAN (SEARCH) ---
-    public WordEntry search(String key) {
+    // --- VISUALISASI PENCARIAN (SEARCH) - VERSI RESTORED ---
+    public Node search(String key) {
         System.out.println("\n------------------------------------------------");
         System.out.println("[RBT SEARCH] Mencari Kata: \"" + key + "\"");
         System.out.println("------------------------------------------------");
@@ -130,13 +127,14 @@ public class RedBlackTree {
             steps++;
             int cmp = key.compareToIgnoreCase(current.getKey());
             
+            // Log Visualisasi Langkah
             String nodeColor = (current.color == RBTColor.RED) ? "[MERAH]" : "[HITAM]";
             System.out.println("   Langkah " + steps + ": Cek Node [" + current.getKey() + "] " + nodeColor);
 
             if (cmp == 0) {
                 System.out.println("   [KETEMU] Data ditemukan pada kedalaman: " + steps);
                 System.out.println("------------------------------------------------\n");
-                return current.data;
+                return current; // PENTING: Mengembalikan Node, bukan WordEntry
             } else if (cmp < 0) {
                 System.out.println("      >> Kata lebih kecil (A-Z), belok ke KIRI (L)");
                 current = current.left;
@@ -150,6 +148,7 @@ public class RedBlackTree {
         return null;
     }
 
+    // --- VISUALISASI STRUKTUR POHON ---
     public void printTree() {
         System.out.println("\n[VISUALISASI STRUKTUR RED-BLACK TREE]");
         System.out.println("========================================");
@@ -164,19 +163,15 @@ public class RedBlackTree {
     private void printTreeRecursive(Node node, String indent, boolean isLast, String position) {
         if (node != NIL) {
             System.out.print(indent);
-            
             if (isLast) {
-                System.out.print("L-- "); 
+                System.out.print("L-- ");
                 indent += "    ";
             } else {
-                System.out.print("|-- "); 
+                System.out.print("|-- ");
                 indent += "|   ";
             }
 
             String colorIcon = (node.color == RBTColor.RED) ? "(R)" : "(B)";
-            
-            // Print Data: [Posisi] Kata (Warna)
-            // (R) = RED/MERAH, (B) = BLACK/HITAM
             System.out.println(position + " " + node.getKey() + " " + colorIcon);
 
             printTreeRecursive(node.left, indent, false, "[L]");

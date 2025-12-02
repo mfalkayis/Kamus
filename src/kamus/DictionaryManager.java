@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DictionaryManager {
-    // PATH RELATIF KE FOLDER DATA
     private final String DATA_FILE_PATH = "data/dictionary.txt";
     private static final String CSV_DELIMITER = ",";
 
@@ -20,29 +19,37 @@ public class DictionaryManager {
     }
 
     public void initializeDictionary() {
-        System.out.println("Memulai loading data...");
         List<WordEntry> entries = loadDictionaryData();
-
         for (WordEntry entry : entries) {
-            // 1. Masukkan ke RBT (Indo -> Inggris)
+            // Kita buat Node secara manual disini agar bisa dishare
+            // Tapi karena RBT.insert biasanya membuat Node baru di dalam, 
+            // kita perlu memodifikasi RBT.insert sedikit ATAU kita biarkan RBT membuat node, 
+            // lalu kita cari node itu untuk dimasukkan ke Hash.
+            
+            // Biarkan RBT membuat Node, lalu kita ambil Node itu (search) untuk dimasukkan ke Hash.
             this.indoToEnglishTree.insert(entry);
-            // 2. Masukkan ke Hash Table (Inggris -> Indo)
-            this.englishToIndoTable.insert(entry);
+            
+            // Cari node yang baru saja dibuat
+            Node createdNode = this.indoToEnglishTree.search(entry.getIndoWord());
+            
+            // Masukkan Node yang SAMA ke Hash Table
+            if (createdNode != null) {
+                this.englishToIndoTable.insert(createdNode);
+            }
         }
-
-        this.indoToEnglishTree.printTree(); 
-        
-        System.out.println("Data Loaded. Total Kata: " + entries.size());
+        this.indoToEnglishTree.printTree();
     }
 
-    public WordEntry searchIndoToEnglish(String indoKey) {
-        return indoToEnglishTree.search(indoKey);
+    // Return Node sekarang
+    public Node searchIndoToEnglish(String key) {
+        return indoToEnglishTree.search(key);
     }
 
-    public WordEntry searchEnglishToIndo(String englishKey) {
-        return englishToIndoTable.search(englishKey);
+    public Node searchEnglishToIndo(String key) {
+        return englishToIndoTable.search(key);
     }
-
+    
+    // ... method loadDictionaryData  ...
     private List<WordEntry> loadDictionaryData() {
         List<WordEntry> entries = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILE_PATH))) {
@@ -51,16 +58,10 @@ public class DictionaryManager {
                 if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(CSV_DELIMITER, 4);
                 if (parts.length == 4) {
-                    entries.add(new WordEntry(
-                        parts[0].trim(), parts[1].trim(), 
-                        parts[2].trim(), parts[3].trim()
-                    ));
+                    entries.add(new WordEntry(parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim()));
                 }
             }
-        } catch (IOException e) {
-            System.err.println("Gagal membaca file data: " + e.getMessage());
-            System.err.println("Pastikan file ada di folder: " + DATA_FILE_PATH);
-        }
+        } catch (IOException e) { e.printStackTrace(); }
         return entries;
     }
 }

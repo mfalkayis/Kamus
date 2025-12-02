@@ -3,9 +3,6 @@ package kamus;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -57,20 +54,15 @@ public class DictionaryUI extends JFrame {
         headerPanel.setBackground(COLOR_HEADER);
         headerPanel.setBorder(new EmptyBorder(20, 40, 30, 40)); 
 
-        // 1. Judul Aplikasi
         JLabel lblAppTitle = new JLabel("KAMUS");
         lblAppTitle.setFont(new Font(FONT_NAME, Font.BOLD, 32));
         lblAppTitle.setForeground(Color.BLACK);
         lblAppTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblAppTitle.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
         lblAppTitle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                resetView();
-            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) { resetView(); }
         });
         
-        // 2. Panel Pencarian
         JPanel searchContainer = new JPanel(new BorderLayout(5, 0));
         searchContainer.setBackground(COLOR_HEADER);
         searchContainer.setMaximumSize(new Dimension(800, 45)); 
@@ -82,7 +74,6 @@ public class DictionaryUI extends JFrame {
         btnHome.setFocusPainted(false);
         btnHome.setBorder(new EmptyBorder(0, 15, 0, 15));
         btnHome.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnHome.setToolTipText("Kembali ke Awal (Reset)");
         btnHome.addActionListener(e -> resetView());
 
         txtSearch = new JTextField();
@@ -108,7 +99,6 @@ public class DictionaryUI extends JFrame {
         searchContainer.add(txtSearch, BorderLayout.CENTER);
         searchContainer.add(btnSearch, BorderLayout.EAST);
         
-        // 3. Toggle
         JPanel togglePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         togglePanel.setBackground(COLOR_HEADER);
         
@@ -168,13 +158,13 @@ public class DictionaryUI extends JFrame {
         add(new JScrollPane(contentPanel), BorderLayout.CENTER);
     }
 
-    // --- RESET VIEW (HOME) ---
     private void resetView() {
+        resetStyle(); 
         lblResultTitle.setText("Wiki");
-        lblResultCategory.setText("Ensiklopedia Kamus");
+        lblResultCategory.setText("Ensiklopedia");
         
         txtResultDesc.setText(
-            "Selamat datang di Aplikasi Kamus "
+            "Selamat datang di Aplikasi Kamus & Wiki.\n\n" 
         );
 
         txtSearch.setText(""); 
@@ -186,23 +176,27 @@ public class DictionaryUI extends JFrame {
         if (isIndoIndex) {
             btnSwitch.setText("Indonesia");
         } else {
-            btnSwitch.setText("Inggris");
+            btnSwitch.setText("Inggris / Alias");
         }
         resetView(); 
     }
 
     private void performSearch() {
+        // 1. Reset tampilan (hapus blur/miring sisa pencarian sebelumnya)
+        resetStyle();
+        
         String keyword = txtSearch.getText().trim();
         if (keyword.isEmpty()) return;
 
-        WordEntry result;
+        Node resultNode;
         if (isIndoIndex) {
-            result = dictionaryManager.searchIndoToEnglish(keyword);
+            resultNode = dictionaryManager.searchIndoToEnglish(keyword);
         } else {
-            result = dictionaryManager.searchEnglishToIndo(keyword);
+            resultNode = dictionaryManager.searchEnglishToIndo(keyword);
         }
 
-        if (result != null) {
+        if (resultNode != null) {
+            WordEntry result = resultNode.data;
             String title = isIndoIndex ? result.getIndoWord() : result.getEnglishWord();
             String subtitle = isIndoIndex ? result.getEnglishWord() : result.getIndoWord();
             
@@ -210,13 +204,8 @@ public class DictionaryUI extends JFrame {
             lblResultCategory.setText(subtitle + " • " + result.getWordType());
             txtResultDesc.setText(result.getDescription());
 
-            // Multimedia
-            String mediaKey = isIndoIndex ? result.getIndoWord() : result.getEnglishWord();
-            boolean videoPlayed = playVideo(mediaKey);
-            if (!videoPlayed) {
-                showImagePopup(mediaKey);
-                playAudio(mediaKey);
-            }
+            resultNode.runGimmick(this); 
+            
         } else {
             lblResultTitle.setText("404");
             lblResultCategory.setText("Tidak Ditemukan");
@@ -224,83 +213,19 @@ public class DictionaryUI extends JFrame {
         }
     }
 
-    // --- LOGIKA MULTIMEDIA  ---
-    private boolean playVideo(String keyword) {
-        String videoPath = "data/video/" + keyword.toLowerCase() + ".mp4";
-        File videoFile = new File(videoPath);
-        if (videoFile.exists()) {
-            new Thread(() -> {
-                try {
-                    if (Desktop.isDesktopSupported()) Desktop.getDesktop().open(videoFile);
-                } catch (IOException e) { e.printStackTrace(); }
-            }).start();
-            return true;
-        }
-        return false;
+    public JTextArea getTxtResultDesc() { 
+        return txtResultDesc; 
     }
 
-    private void playAudio(String keyword) {
-        new Thread(() -> {
-            try {
-                String soundPath = "data/audio/" + keyword.toLowerCase() + ".wav";
-                File soundFile = new File(soundPath);
-                if (soundFile.exists()) {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(audioIn);
-                    clip.start();
-                }
-            } catch (Exception e) {}
-        }).start();
+    @Override
+    public JPanel getContentPane() {
+        return (JPanel) super.getContentPane();
     }
-
-    private void showImagePopup(String keyword) {
-        if (currentPopup != null) {
-            currentPopup.dispose();
-            if (popupTimer != null) popupTimer.stop();
-        }
-        String basePath = "data/images/" + keyword.toLowerCase();
-        File imgFile = new File(basePath + ".jpg");
-        if (!imgFile.exists()) imgFile = new File(basePath + ".png");
-        if (!imgFile.exists()) return;
-
-        currentPopup = new JWindow(this);
-        try { currentPopup.setBackground(new Color(0, 0, 0, 0)); } 
-        catch (UnsupportedOperationException e) { currentPopup.setBackground(COLOR_BG); }
-
-        JPanel content = new JPanel(new BorderLayout());
-        content.setOpaque(false);
-        content.setBorder(null);
-
-        ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
-        Image img = icon.getImage();
-        int maxW = 350;
-        Image newImg = img.getScaledInstance(maxW, -1, Image.SCALE_SMOOTH); 
-
-        JLabel lblImg = new JLabel(new ImageIcon(newImg));
-        JLabel lblCaption = new JLabel(keyword, SwingConstants.CENTER);
-        lblCaption.setForeground(Color.BLACK);
-        lblCaption.setFont(new Font(FONT_NAME, Font.BOLD, 16));
-        lblCaption.setOpaque(true);
-        lblCaption.setBackground(new Color(255, 255, 255, 200));
-        lblCaption.setBorder(new EmptyBorder(5, 10, 5, 10));
-
-        content.add(lblImg, BorderLayout.CENTER);
-        content.add(lblCaption, BorderLayout.SOUTH);
-        currentPopup.add(content);
-
-        currentPopup.pack();
-        currentPopup.setLocationRelativeTo(null);
-        currentPopup.setVisible(true);
-        currentPopup.setAlwaysOnTop(true);
-
-        popupTimer = new Timer(3000, e -> {
-            if (currentPopup != null) {
-                currentPopup.dispose();
-                currentPopup = null;
-            }
-        });
-        popupTimer.setRepeats(false);
-        popupTimer.start();
+    
+    public void resetStyle() {
+        txtResultDesc.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
+        txtResultDesc.setForeground(COLOR_TEXT);
+        getGlassPane().setVisible(false); 
+        getContentPane().setBackground(COLOR_BG); 
     }
 }

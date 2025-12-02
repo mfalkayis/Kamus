@@ -36,3 +36,8 @@ Spongebob,Spongebob,Tokoh Kartun,Spons kuning yang tinggal di dalam rumah nanas 
 Windows XP,Windows XP,Sistem Operasi,OS legendaris Microsoft dengan suara startup yang bikin nostalgia.
 Gigachad,Gigachad,Meme Internet,Sosok pria hitam putih yang melambangkan maskulinitas absolut.
 Sad Violin,Sad Music,Musik Meme,Musik biola sedih yang cocok diputar saat momen tragis.
+Miring,Italic,Gimmick Teks,Contoh teks yang akan berubah menjadi miring secara otomatis.
+Blur,Blur Effect,Gimmick Visual,Efek yang membuat pandangan menjadi kabur sejenak.
+Kabur,Blur Effect,Gimmick Visual,Sinonim dari blur untuk efek mata minus.
+Error,System Error,Gimmick Warna,Simulasi kerusakan sistem dengan latar merah.
+Gempa,Earthquake,Gimmick Gerak,Awas! Guncangan tektonik terdeteksi di aplikasi ini.
