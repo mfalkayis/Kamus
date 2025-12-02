@@ -63,11 +63,11 @@ public class RedBlackTree {
                 } else {
                     if (k == k.parent.right) {
                         k = k.parent;
-                        leftRotate(k); // Visualisasi Rotasi ada di method leftRotate
+                        leftRotate(k); 
                     }
                     k.parent.color = RBTColor.BLACK;
                     k.parent.parent.color = RBTColor.RED;
-                    rightRotate(k.parent.parent); // Visualisasi Rotasi
+                    rightRotate(k.parent.parent); 
                 }
             } else {
                 u = k.parent.parent.left;
@@ -130,7 +130,6 @@ public class RedBlackTree {
             steps++;
             int cmp = key.compareToIgnoreCase(current.getKey());
             
-            // Mengganti Emot Warna dengan Teks
             String nodeColor = (current.color == RBTColor.RED) ? "[MERAH]" : "[HITAM]";
             System.out.println("   Langkah " + steps + ": Cek Node [" + current.getKey() + "] " + nodeColor);
 
@@ -162,21 +161,18 @@ public class RedBlackTree {
         System.out.println("========================================\n");
     }
 
-    // Method rekursif untuk menggambar garis cabang
     private void printTreeRecursive(Node node, String indent, boolean isLast, String position) {
         if (node != NIL) {
             System.out.print(indent);
             
-            // Simbol cabang menggunakan karakter ASCII standar yang lebih aman
             if (isLast) {
-                System.out.print("L-- "); // L-- menggantikan simbol siku
+                System.out.print("L-- "); 
                 indent += "    ";
             } else {
-                System.out.print("|-- "); // |-- menggantikan simbol cabang
+                System.out.print("|-- "); 
                 indent += "|   ";
             }
 
-            // Indikator Warna (Ganti Emotikon dengan Teks)
             String colorIcon = (node.color == RBTColor.RED) ? "(R)" : "(B)";
             
             // Print Data: [Posisi] Kata (Warna)

@@ -41,10 +41,10 @@ public class HashTable {
         long end = System.nanoTime();
 
         if (result != null) {
-            System.out.println("   3. ✅ DITEMUKAN SECARA INSTAN! (O(1))");
+            System.out.println("   3. DITEMUKAN SECARA INSTAN! (O(1))");
             System.out.println("      Waktu akses memori: " + (end - start) + " nanodetik");
         } else {
-            System.out.println("   3. ❌ Tidak ditemukan di bucket manapun.");
+            System.out.println("   3. Tidak ditemukan di bucket manapun.");
         }
         System.out.println("================================================\n");
 

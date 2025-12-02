@@ -26,22 +26,19 @@ public class DictionaryUI extends JFrame {
     private JWindow currentPopup; 
     private Timer popupTimer;     
 
-    // --- TEMA BARU (MOCCA & MONOSPACE) ---
-    // Font Utama
+    // --- TEMA MOCCA & MONOSPACE ---
     private final String FONT_NAME = "DejaVu Sans Mono"; 
-
-    // Palet Warna (Disesuaikan dengan Screenshot)
-    private final Color COLOR_HEADER = new Color(205, 185, 160); // Warna Mocca/Latte
-    private final Color COLOR_BG = new Color(245, 240, 235);     // Cream/Putih Tulang
-    private final Color COLOR_BTN_SEARCH = new Color(220, 75, 65); // Merah Bata
+    private final Color COLOR_HEADER = new Color(205, 185, 160); 
+    private final Color COLOR_BG = new Color(245, 240, 235);     
+    private final Color COLOR_BTN_SEARCH = new Color(220, 75, 65); 
+    private final Color COLOR_BTN_HOME = new Color(90, 90, 90); 
     private final Color COLOR_TEXT = Color.BLACK;
     
     public DictionaryUI() {
         dictionaryManager = new DictionaryManager();
         dictionaryManager.initializeDictionary();
 
-        setTitle("Kamus"); // Judul Window Simpel
-        // UKURAN BARU: Lebih lebar (Landscape) sesuai screenshot ke-2
+        setTitle("Kamus"); 
         setSize(900, 600); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -50,29 +47,47 @@ public class DictionaryUI extends JFrame {
 
         initHeader();
         initContentArea();
+        
+        resetView();
     }
 
     private void initHeader() {
-        // Panel Header Utama (Warna Mocca)
         JPanel headerPanel = new JPanel();
-        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS)); // Susun vertikal
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS)); 
         headerPanel.setBackground(COLOR_HEADER);
-        headerPanel.setBorder(new EmptyBorder(20, 40, 30, 40)); // Padding
+        headerPanel.setBorder(new EmptyBorder(20, 40, 30, 40)); 
 
-        // 1. Judul "KAMUS" Besar
+        // 1. Judul Aplikasi
         JLabel lblAppTitle = new JLabel("KAMUS");
         lblAppTitle.setFont(new Font(FONT_NAME, Font.BOLD, 32));
         lblAppTitle.setForeground(Color.BLACK);
         lblAppTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblAppTitle.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // 2. Panel Pencarian (Search Bar + Tombol Merah)
+        lblAppTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resetView();
+            }
+        });
+        
+        // 2. Panel Pencarian
         JPanel searchContainer = new JPanel(new BorderLayout(5, 0));
         searchContainer.setBackground(COLOR_HEADER);
-        searchContainer.setMaximumSize(new Dimension(800, 45)); // Batasi lebar agar rapi
+        searchContainer.setMaximumSize(new Dimension(800, 45)); 
         
+        JButton btnHome = new JButton("⌂"); 
+        btnHome.setBackground(COLOR_BTN_HOME);
+        btnHome.setForeground(Color.WHITE);
+        btnHome.setFont(new Font("SansSerif", Font.BOLD, 18)); 
+        btnHome.setFocusPainted(false);
+        btnHome.setBorder(new EmptyBorder(0, 15, 0, 15));
+        btnHome.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnHome.setToolTipText("Kembali ke Awal (Reset)");
+        btnHome.addActionListener(e -> resetView());
+
         txtSearch = new JTextField();
         txtSearch.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
-        txtSearch.setBorder(new EmptyBorder(5, 10, 5, 10)); // Padding teks
+        txtSearch.setBorder(new EmptyBorder(5, 10, 5, 10)); 
         txtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -89,20 +104,21 @@ public class DictionaryUI extends JFrame {
         btnSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnSearch.addActionListener(e -> performSearch());
 
+        searchContainer.add(btnHome, BorderLayout.WEST);
         searchContainer.add(txtSearch, BorderLayout.CENTER);
         searchContainer.add(btnSearch, BorderLayout.EAST);
         
-        // 3. Tombol Toggle (Mode Bahasa) di bawah Search Bar
+        // 3. Toggle
         JPanel togglePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         togglePanel.setBackground(COLOR_HEADER);
         
         btnSwitch = new JButton("Indonesia");
         btnSwitch.setFont(new Font(FONT_NAME, Font.PLAIN, 12));
-        btnSwitch.setBackground(COLOR_HEADER); // Warna sama dengan header
+        btnSwitch.setBackground(COLOR_HEADER); 
         btnSwitch.setForeground(Color.BLACK);
         btnSwitch.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(Color.BLACK, 1), // Garis pinggir hitam tipis
-                new EmptyBorder(5, 40, 5, 40)   // Padding dalam lebar
+                new LineBorder(Color.BLACK, 1), 
+                new EmptyBorder(5, 40, 5, 40)   
         ));
         btnSwitch.setFocusPainted(false);
         btnSwitch.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -110,11 +126,10 @@ public class DictionaryUI extends JFrame {
         
         togglePanel.add(btnSwitch);
 
-        // Menambahkan komponen ke Header Panel dengan spasi
         headerPanel.add(lblAppTitle);
-        headerPanel.add(Box.createVerticalStrut(15)); // Jarak judul ke search
+        headerPanel.add(Box.createVerticalStrut(15)); 
         headerPanel.add(searchContainer);
-        headerPanel.add(Box.createVerticalStrut(10)); // Jarak search ke toggle
+        headerPanel.add(Box.createVerticalStrut(10)); 
         headerPanel.add(togglePanel);
 
         add(headerPanel, BorderLayout.NORTH);
@@ -124,23 +139,19 @@ public class DictionaryUI extends JFrame {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(COLOR_BG);
-        contentPanel.setBorder(new EmptyBorder(40, 60, 40, 60)); // Margin kiri-kanan lebih luas
+        contentPanel.setBorder(new EmptyBorder(40, 60, 40, 60)); 
 
-        // 1. Judul Kata (Besar, Font Monospace)
-        lblResultTitle = new JLabel("Wiki Pintar");
-        lblResultTitle.setFont(new Font(FONT_NAME, Font.BOLD, 42)); // Font Besar
-        lblResultTitle.setForeground(new Color(40, 50, 70)); // Biru Gelap hampir hitam
+        lblResultTitle = new JLabel();
+        lblResultTitle.setFont(new Font(FONT_NAME, Font.BOLD, 42)); 
+        lblResultTitle.setForeground(new Color(40, 50, 70)); 
         lblResultTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // 2. Sub-judul / Terjemahan (Miring)
-        lblResultCategory = new JLabel("Ketik kata di kolom pencarian...");
+        lblResultCategory = new JLabel();
         lblResultCategory.setFont(new Font(FONT_NAME, Font.ITALIC, 16));
         lblResultCategory.setForeground(Color.GRAY);
         lblResultCategory.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        // 3. Deskripsi
         txtResultDesc = new JTextArea();
-        txtResultDesc.setText("");
         txtResultDesc.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
         txtResultDesc.setForeground(COLOR_TEXT);
         txtResultDesc.setLineWrap(true);
@@ -148,7 +159,7 @@ public class DictionaryUI extends JFrame {
         txtResultDesc.setEditable(false);
         txtResultDesc.setBackground(COLOR_BG);
         txtResultDesc.setAlignmentX(Component.LEFT_ALIGNMENT);
-        txtResultDesc.setBorder(new EmptyBorder(20, 0, 0, 0)); // Jarak dari judul
+        txtResultDesc.setBorder(new EmptyBorder(20, 0, 0, 0)); 
 
         contentPanel.add(lblResultTitle);
         contentPanel.add(lblResultCategory);
@@ -157,15 +168,27 @@ public class DictionaryUI extends JFrame {
         add(new JScrollPane(contentPanel), BorderLayout.CENTER);
     }
 
+    // --- RESET VIEW (HOME) ---
+    private void resetView() {
+        lblResultTitle.setText("Wiki");
+        lblResultCategory.setText("Ensiklopedia Kamus");
+        
+        txtResultDesc.setText(
+            "Selamat datang di Aplikasi Kamus "
+        );
+
+        txtSearch.setText(""); 
+        txtSearch.requestFocus(); 
+    }
+
     private void switchIndex() {
         isIndoIndex = !isIndoIndex;
         if (isIndoIndex) {
             btnSwitch.setText("Indonesia");
         } else {
-            btnSwitch.setText("Inggris / Alias");
+            btnSwitch.setText("Inggris");
         }
-        txtSearch.setText("");
-        txtSearch.requestFocus();
+        resetView(); 
     }
 
     private void performSearch() {
@@ -187,9 +210,8 @@ public class DictionaryUI extends JFrame {
             lblResultCategory.setText(subtitle + " • " + result.getWordType());
             txtResultDesc.setText(result.getDescription());
 
-            // --- MULTIMEDIA ---
+            // Multimedia
             String mediaKey = isIndoIndex ? result.getIndoWord() : result.getEnglishWord();
-            
             boolean videoPlayed = playVideo(mediaKey);
             if (!videoPlayed) {
                 showImagePopup(mediaKey);
@@ -198,12 +220,11 @@ public class DictionaryUI extends JFrame {
         } else {
             lblResultTitle.setText("404");
             lblResultCategory.setText("Tidak Ditemukan");
-            txtResultDesc.setText("Maaf, kata '" + keyword + "' tidak ditemukan.");
+            txtResultDesc.setText("Maaf, kata '" + keyword + "' tidak ditemukan dalam database.");
         }
     }
 
-    // --- LOGIKA MULTIMEDIA (TIDAK BERUBAH) ---
-
+    // --- LOGIKA MULTIMEDIA  ---
     private boolean playVideo(String keyword) {
         String videoPath = "data/video/" + keyword.toLowerCase() + ".mp4";
         File videoFile = new File(videoPath);
